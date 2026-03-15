@@ -4,7 +4,7 @@ source_branch: feature/xyz                         # string - branch being migra
 target_branch: main                                # string - branch being migrated to
 last_commit_hash: e0d8be7e3de64eee727ac0913044439cf9948880  # sha - last commit processed
 migration_status: pending                          # enum: pending|in_progress|completed|failed
-conflicts_resolved: []                             # array - list of sha or issues resolved
+conflicts_resolved: false                          # bool - whether conflicts were resolved
 ```
 
 ## Field Descriptions
@@ -16,7 +16,7 @@ conflicts_resolved: []                             # array - list of sha or issu
 | target_branch | Branch name to which changes are being migrated |
 | last_commit_hash | Most recent commit processed (for idempotency/checkpointing) |
 | migration_status | Current state: pending, in_progress, completed, failed |
-| conflicts_resolved | Array of commit SHAs or issue IDs that had conflicts and were resolved |
+| conflicts_resolved | Boolean indicating whether conflicts were resolved during migration |
 
 ## Staleness Check
 

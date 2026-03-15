@@ -60,7 +60,6 @@ target_branch: <str>
 last_commit_hash: <sha>
 migration_status: pending|completed|failed
 conflicts_resolved: bool
-staleness_note: <str|null>
 ```
 
 ## Commands
