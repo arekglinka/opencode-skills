@@ -1,0 +1,14 @@
+# IDE
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+*.tmp
+*.swp
+*~
+
+# Node (if ever used)
+node_modules/
