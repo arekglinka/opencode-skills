@@ -15,11 +15,27 @@ https://raw.githubusercontent.com/arekglinka/opencode-skills/main/docs/guide/ins
 
 ### For LLM Agents
 
-Fetch and follow:
-
 ```bash
 curl -s https://raw.githubusercontent.com/arekglinka/opencode-skills/main/docs/guide/installation.md
 ```
+
+### Quick Install (One-Liner)
+
+```bash
+mkdir -p ~/.config/opencode/skills && \
+curl -fsSL https://github.com/arekglinka/opencode-skills/archive/refs/heads/main.tar.gz | \
+tar xz -C /tmp && \
+cp -r /tmp/opencode-skills-main/.opencode/skills/meta-skill ~/.config/opencode/skills/ && \
+ls ~/.config/opencode/skills/meta-skill/SKILL.md
+```
+
+### Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| 404 on curl | Wait 1 min (rate limit) or try tarball method |
+| Skill not found | Copy `.opencode/skills/meta-skill/`, not repo root |
+| Permission denied | `mkdir -p ~/.config/opencode/skills` |
 
 ## Skills
 
@@ -35,13 +51,6 @@ curl -s https://raw.githubusercontent.com/arekglinka/opencode-skills/main/docs/g
 | **Local Memory** | `local-memory.md` tracks: timestamp, commit, upgrade state, project context |
 | **Self-Update** | Detects stale memory → asks permission → respects "block until" |
 | **Compression** | Abbreviate, inline, mermaid, pipe-delimit. Target <70 lines |
-
-### Memory Placement
-
-| Context | Store |
-|---------|-------|
-| Project-specific | `local-memory.md` |
-| Skill-intrinsic | `SKILL.md` |
 
 ## Contributing
 
