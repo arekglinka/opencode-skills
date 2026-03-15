@@ -1,20 +1,21 @@
 ---
 name: readme-auditor
-description: Validates and updates README.md files. Checks for outdated content, broken links, and consistency with project state.
+description: README validation and updating framework. Orchestrates README checks via dedicated agents.
 license: MIT
 compatibility: opencode
 ---
 
 ## Intent
 
-Automated README validation and updating for skill repositories.
+Orchestration layer for README validation and content extraction. Uses meta-skill pattern to delegate work to explore agent.
 
 ## Structure
 
 ```
-readme-auditor/SKILL.md     # core skill
-├── scripts/               # helper scripts
-└── references/            # validation rules, common patterns
+readme-auditor/SKILL.md     # orchestration (this file)
+└── references/            # reusable patterns, workflows
+    ├── validation-rules.md
+    └── quick-start.md
 ```
 
 ## Rules
@@ -42,23 +43,20 @@ project_context: <notes>
 |----------|---------|-------------|
 | check | `readme check <path>` | Validate single README |
 | audit | `readme audit` | Check all READMEs in project |
-| update | `readme update <path>` | Update outdated sections |
-| fix-links | `readme fix-links <path>` | Validate/correct broken links |
-| sections | `readme sections <path>` | Show section structure |
+| extract | `readme extract <path> <key>` | Extract info from README (lazy) |
 
-## Compression
+## Architecture
 
-| Technique | Example |
-|-----------|---------|
-| Abbreviate | `markdown→md`, `installation→inst` |
-| Inline | `See section X` → `§X` |
-| Single-line | `a\nb\nc` → `a \| b \| c` |
-| Pipe map | `opt1: val1` → `opt1→val1` |
+**Meta-skill pattern** for durability:
 
-**Target**: <70 lines | extended → `references/`
+1. **SKILL.md** - Orchestration only (minimal content)
+2. **References/** - Detailed rules (external, updateable separately)
+3. **Delegates** to `explore` agent for README parsing
+4. **Caches** results for performance
+
+This avoids content obsolescence - rules live in references/, not in SKILL.md.
 
 ## Refs
 
-- [validation rules](references/validation-rules.md)
-- [section patterns](references/sections.md)
-- [common fixes](references/common-fixes.md)
+- [validation rules](references/validation-rules.md) - Detailed issue detection
+- [quick start](references/quick-start.md) - Usage examples and workflows

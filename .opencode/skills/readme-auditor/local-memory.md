@@ -10,3 +10,4 @@ project_context: |
 ## History
 
 2026-03-15: init - created validation rules, audit commands
+2026-03-15: refactored to meta-skill pattern, moved rules to references/
