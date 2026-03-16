@@ -48,7 +48,7 @@ project_context: <notes>
 | validate | `cfg validate` | Verify cfg syntax |
 | backup | `cfg backup` | Save cfg state |
 | restore | `cfg restore` | Load cfg state |
-| lsp | `cfg lsp <list|check|set>` | Manage LSP servers (see `references/lsp-config.md`) |
+| sync | `cfg sync-models` | Sync provider models from API |
 
 ## Compression
 
@@ -63,7 +63,5 @@ project_context: <notes>
 
 ## Refs
 
-- [schemas](references/schemas.md)
-- [examples](references/examples.md)
-- [validation](references/validation.md)
-- [LSP config](references/lsp-config.md)
+- [config-files](references/config-files.md)
+- [model-syncing](references/model-syncing.md)
