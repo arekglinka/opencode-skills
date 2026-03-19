@@ -60,28 +60,11 @@ curl -s "https://openrouter.ai/api/v1/models" \
 5. Verify → run opencode auth list
 ```
 
-## Z.ai Config Example
+## Z.ai Config
 
-```json
-{
-  "provider": {
-    "zai2": {
-      "name": "zai2",
-      "npm": "@ai-sdk/openai-compatible",
-      "models": {
-        "glm-4.5": { "name": "glm-4.5" },
-        "glm-4.6": { "name": "glm-4.6" },
-        "glm-4.7": { "name": "glm-4.7" },
-        "glm-5": { "name": "glm-5" },
-        "glm-5-turbo": { "name": "glm-5-turbo" }
-      },
-      "options": {
-        "baseURL": "https://api.z.ai/api/coding/paas/v4"
-      }
-    }
-  }
-}
-```
+Use built-in `zai-coding-plan` provider (configured via `opencode auth login`). No manual provider definition needed.
+
+Available models: `glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, `glm-5`, `glm-5-turbo`
 
 ## Agent Model Assignment
 

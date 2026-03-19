@@ -46,6 +46,37 @@ dev = ["polylith-cli>=1.43.0"]
 
 ## Rust Component (Maturin)
 
+See @references/maturin-rust-pyo3.md for full reference.
+
+### rust/pyproject.toml
+```toml
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "rust_component_name"
+version = "0.1.0"
+requires-python = ">=3.13"
+
+[tool.maturin]
+module-name = "rust_component_name"
+features = ["python"]        # Cargo feature, NOT "pyo3/extension-module"
+locked = true
+
+[tool.uv]
+cache-keys = [{ file = "Cargo.toml" }, { file = "src/**/*.rs" }]
+```
+
+### Root pyproject.toml (dependency + source)
+```toml
+[project]
+dependencies = ["rust_component_name"]
+
+[tool.uv.sources]
+rust_component_name = { path = "components/{ns}/rust_component/rust" }
+```
+
 ### rust/Cargo.toml
 ```toml
 [lib]
@@ -54,6 +85,8 @@ crate-type = ["cdylib", "rlib"]
 pyo3 = { version = "0.23", features = ["extension-module"], optional = true }
 [features]
 python = ["dep:pyo3"]
+[profile.release]
+opt-level = 3; lto = true  # NO strip = true
 ```
 
 ### core.py Pattern

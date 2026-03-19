@@ -65,3 +65,5 @@ project_context: <notes>
 
 - [config-files](references/config-files.md)
 - [model-syncing](references/model-syncing.md)
+- [agent-setup](references/agent-setup.md)
+- [local-config](references/local-config.md)
