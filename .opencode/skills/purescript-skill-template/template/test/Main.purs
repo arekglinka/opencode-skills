@@ -5,6 +5,7 @@ import Prelude
 import Effect (Effect)
 import Effect.Class.Console (log)
 import Test.Anomaly as Anomaly
+import Test.QueryTools as QueryTools
 import Test.Statistics as Statistics
 import Test.Tracer as Tracer
 
@@ -16,4 +17,6 @@ main = do
   Statistics.run
   log "Running Anomaly tests..."
   Anomaly.run
+  log "Running Query tools tests..."
+  QueryTools.run
   log "All tests passed."
