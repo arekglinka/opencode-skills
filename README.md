@@ -9,24 +9,25 @@ Agent Skills for OpenCode. Build, maintain, compress.
 Paste into your LLM agent:
 
 ```
-Install the meta-skill by following instructions here:
-https://raw.githubusercontent.com/arekglinka/opencode-skills/main/docs/guide/installation.md
+Install skills from: https://github.com/arekglinka/opencode-skills
+Follow instructions at: docs/guide/installation.md
 ```
 
 ### For LLM Agents
 
 ```bash
-curl -s https://raw.githubusercontent.com/arekglinka/opencode-skills/main/docs/guide/installation.md
+git clone --depth 1 https://github.com/arekglinka/opencode-skills.git /tmp/opencode-skills && \
+mkdir -p ~/.config/opencode/skills && \
+cp -r /tmp/opencode-skills/.opencode/skills/<skill-name> ~/.config/opencode/skills/
 ```
 
-### Quick Install (One-Liner)
+### Quick Install (All Skills)
 
 ```bash
+git clone --depth 1 https://github.com/arekglinka/opencode-skills.git /tmp/opencode-skills && \
 mkdir -p ~/.config/opencode/skills && \
-curl -fsSL https://github.com/arekglinka/opencode-skills/archive/refs/heads/main.tar.gz | \
-tar xz -C /tmp && \
-cp -r /tmp/opencode-skills-main/.opencode/skills/meta-skill ~/.config/opencode/skills/ && \
-ls ~/.config/opencode/skills/meta-skill/SKILL.md
+cp -r /tmp/opencode-skills/.opencode/skills/* ~/.config/opencode/skills/ && \
+ls ~/.config/opencode/skills/*/SKILL.md
 ```
 
 ### Troubleshooting
@@ -34,32 +35,48 @@ ls ~/.config/opencode/skills/meta-skill/SKILL.md
 | Issue | Fix |
 |-------|-----|
 | 404 on curl | Wait 1 min (rate limit) or try tarball method |
-| Skill not found | Copy `.opencode/skills/meta-skill/`, not repo root |
+| Skill not found | Copy `.opencode/skills/<name>/`, not repo root |
 | Permission denied | `mkdir -p ~/.config/opencode/skills` |
 
 ## Skills
 
 | Skill | Description |
 |-------|-------------|
-| [meta-skill](./.opencode/skills/meta-skill/SKILL.md) | Creates + maintains Agent Skills, applies compression |
+| [meta-skill](./.opencode/skills/meta-skill/SKILL.md) | Creates and maintains Agent Skills |
+| [readme-auditor](./.opencode/skills/readme-auditor/SKILL.md) | README validation and updating framework |
+| [conventional-commits](./.opencode/skills/conventional-commits/SKILL.md) | Enforces Conventional Commits 1.0.0 |
+| [branch-migrator](./.opencode/skills/branch-migrator/SKILL.md) | Migrates git branches with analysis, diagrams, validation |
+| [global-config](./.opencode/skills/global-config/SKILL.md) | Manages OpenCode and agent configuration |
+| [project-info](./.opencode/skills/project-info/SKILL.md) | Lazy project information extractor |
+| [task-queue](./.opencode/skills/task-queue/SKILL.md) | Project-local task queue with plan iteration |
+| [vectorbt](./.opencode/skills/vectorbt/SKILL.md) | VectorBT backtesting optimization and antipattern prevention |
+| [performance-profiling](./.opencode/skills/performance-profiling/SKILL.md) | Profile and optimize strategy execution speed |
+| [polylith-check](./.opencode/skills/polylith-check/SKILL.md) | Validates Polylith architecture compliance |
+| [yed-diagrams](./.opencode/skills/yed-diagrams/SKILL.md) | Generate yEd-compatible GraphML diagrams |
 
 ## Architecture
 
 | Concept | Description |
 |---------|-------------|
-| **Intent** | Immutable one-liner. Changes only with user approval |
+| **Meta-skill pattern** | Orchestration in SKILL.md, rules in `references/` — avoids content obsolescence |
+| **Intent** | Immutable one-liner per skill. Changes only with user approval |
 | **Local Memory** | `local-memory.md` tracks: timestamp, commit, upgrade state, project context |
 | **Self-Update** | Detects stale memory → asks permission → respects "block until" |
 | **Compression** | Abbreviate, inline, mermaid, pipe-delimit. Target <70 lines |
+| **Progressive disclosure** | Metadata → Instructions → Resources loaded on-demand |
 
 ## Contributing
 
-1. Follow skill structure
-2. Apply compression rules
-3. Validate: `skills-ref validate ./skill-name`
+1. Follow [Agent Skills specification](https://agentskills.io/specification) for SKILL.md format
+2. Apply meta-skill pattern (orchestration + `references/`)
+3. Validate: [skills-ref validate](https://github.com/agentskills/agentskills/tree/main/skills-ref) `./skill-name`
 4. Test in real project
+
+## License
+
+[MIT](./LICENSE) © 2026 Arkadiusz Glinka
 
 ## Refs
 
-- [Agent Skills](https://agentskills.io/specification)
-- [OpenCode Skills](https://opencode.ai/docs/skills/)
+- [Agent Skills Spec](https://agentskills.io/specification)
+- [OpenCode Skills Docs](https://opencode.ai/docs/skills/)
