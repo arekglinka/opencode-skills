@@ -1,6 +1,6 @@
 ---
 name: meta-skill
-description: Creates and maintains Agent Skills. Use when building or updating skills.
+description: Creates and maintains Agent Skills with source tracking. Use when building, updating, or syncing skills from git repos.
 license: MIT
 compatibility: opencode
 ---
@@ -24,60 +24,72 @@ skill-name/SKILL.md    # required: name + description
 | description | 1-1024c, "what" + "when" |
 | body | <500 lines |
 
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `skill create <name>` | Create new skill scaffold |
+| `skill update <name>` | Update skill to HEAD of tracked branch |
+| `skill update --all` | Update all managed skills |
+| `skill switch <name> <repo> <branch>` | Change skill's source repo/branch |
+| `skill sources` | List all tracked skill sources |
+| `skill status [<name>]` | Show sync status (ahead/behind/stale) |
+
 ## Local Memory
 
-`local-memory.md` tracks project context + upgrade state:
+`local-memory.md` tracks managed skills + their sources:
 
 ```yaml
-last_updated: <dt>
-commit_hash: <sha>
-upgrade_permission: allowed|blocked
-upgrade_blocked_until: <date|null>
-project_context: <notes>
+managed_skills:
+  <name>:
+    source_repo: <git-url>
+    source_branch: <branch>
+    commit_hash: <sha>
+    last_updated: <dt>
+meta:
+  last_updated: <dt>
+  upgrade_permission: allowed|blocked
+  upgrade_blocked_until: <date|null>
 ```
 
-## Upgrade Flow
+## Update Flow
 
 ```mermaid
 flowchart TD
-    A[Stale?] -->|no| Z[Skip]
-    A -->|yes| B{blocked?}
-    B -->|yes| C{expired?}
-    C -->|no| Z
-    C -->|yes| D[Ask]
-    B -->|no| D
-    D -->|ok| E[Update]
-    D -->|no| F[Duration?]
-    F --> G[Set blocked_until]
+  A[skill update X] --> B{in managed_skills?}
+  B -->|no| C[Error: not tracked]
+  B -->|yes| D[Fetch source_repo]
+  D --> E[Checkout source_branch]
+  E --> F[Copy to skills dir]
+  F --> G[Update commit_hash]
 ```
 
-Stale = `git rev-parse HEAD ≠ commit_hash`
+## Switch Flow
 
-## Placement
+```mermaid
+flowchart TD
+  A[skill switch X repo branch] --> B[Clone repo to /tmp]
+  B --> C{branch exists?}
+  C -->|no| D[Error: branch not found]
+  C -->|yes| E[Copy skill to skills dir]
+  E --> F[Update managed_skills entry]
+```
 
-| Context | Store |
-| Project-specific | `local-memory.md` |
-| Skill-intrinsic | `SKILL.md` |
+## Status Check
 
-## Compression
+Stale = remote HEAD ≠ local `commit_hash`
 
-Apply when creating/updating skills:
+| Status | Meaning |
+|--------|---------|
+| synced | At tracked commit |
+| behind | Remote has new commits |
+| untracked | Not in managed_skills |
 
-| Technique | Example |
-|-----------|---------|
-| Abbreviate | `chars→c`, `datetime→dt`, `string→str` |
-| Drop headers | Remove if not structural |
-| Inline tables | Explanations → columns |
-| Single-line | `a \| b \| c` instead of list |
-| Mermaid | Flows with >3 branches |
-| Pipe mappings | `opt1→val1 \| opt2→val2` |
-| Merge sections | Combine related rules |
+## Repo Format
 
-**Target**: <70 lines (simple) | <100 lines (complex) | extended → `references/`
+Supported: `https://github.com/owner/repo` | `git@github.com:owner/repo` | local path
 
-## Create
-
-`mkdir skills/<n> && vim skills/<n>/SKILL.md && skills-ref validate ./skills/<n>`
+Branch: any valid git ref (branch, tag, commit SHA)
 
 ## Refs
 
