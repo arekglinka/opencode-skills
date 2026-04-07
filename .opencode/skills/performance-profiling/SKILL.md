@@ -1,3 +1,8 @@
+---
+name: performance-profiling
+description: Profile and optimize trading strategy execution speed. Use when strategy exceeds 100ms, backtest exceeds 10s, or optimization exceeds 1m per trial.
+---
+
 # Performance Profiling
 
 Profile & optimize trading strategy execution speed.

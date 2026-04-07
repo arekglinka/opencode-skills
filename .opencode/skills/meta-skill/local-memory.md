@@ -1,11 +1,13 @@
 ```yaml
-last_updated: 2026-03-16 07:21:00 Europe/Warsaw
-commit_hash: 9731f809b655ad17bd892bcb74e5660d452b16a1
-upgrade_permission: allowed
-upgrade_blocked_until: null
-project_context: |
-  opencode-skills | meta-skill repo | OpenCode, Agent Skills
-  installable via: docs/guide/installation.md
+managed_skills: {}
+meta:
+  last_updated: 2026-03-16 07:21:00 Europe/Warsaw
+  commit_hash: 9731f809b655ad17bd892bcb74e5660d452b16a1
+  upgrade_permission: allowed
+  upgrade_blocked_until: null
+  project_context: |
+    opencode-skills | meta-skill repo | OpenCode, Agent Skills
+    installable via: docs/guide/installation.md
 ```
 
 ## History

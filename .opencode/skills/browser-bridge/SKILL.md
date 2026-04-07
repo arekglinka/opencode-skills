@@ -1,3 +1,8 @@
+---
+name: browser-bridge
+description: Browser automation via WebSocket to a Chrome Extension on ws://localhost:3456. Use when navigating, clicking, evaluating JS, taking screenshots, or extracting page content in an already-running Chromium instance. Replaces Playwright MCP when only browser-bridge extension is available.
+---
+
 Browser automation via browser-bridge — a WebSocket client connecting to a Chrome Extension on `ws://localhost:3456`. Use when navigating, clicking, evaluating JS, taking screenshots, or extracting page content in an already-running Chromium instance. Replaces Playwright MCP when only browser-bridge extension is available.
 
 Shell out to the bridge-cli tool: `node /home/ag/wsp/browser-bridge/tools/bridge-cli.mjs <action> [args]`

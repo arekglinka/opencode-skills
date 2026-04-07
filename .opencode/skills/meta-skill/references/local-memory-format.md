@@ -9,12 +9,12 @@ managed_skills:
     source_branch: <branch-name | tag | sha>
     commit_hash: <sha>
     last_updated: <iso8601>
-    path: <relative-path>  # optional, default: <skill-name>
 meta:
   last_updated: <iso8601>
   commit_hash: <sha>
   upgrade_permission: allowed|blocked
   upgrade_blocked_until: <iso8601 | null>
+  project_context: <str>
 ```
 
 ## Fields
@@ -25,7 +25,7 @@ meta:
 | source_branch | yes | Branch/tag/SHA to track |
 | commit_hash | yes | SHA at last update |
 | last_updated | yes | Timestamp of last sync |
-| path | no | Custom install path |
+| project_context | no | Freeform project notes (preserved across migrations) |
 
 ## Example
 
@@ -36,16 +36,12 @@ managed_skills:
     source_branch: main
     commit_hash: a1b2c3d
     last_updated: 2026-04-07T10:30:00
-  vectorbt:
-    source_repo: https://github.com/arekglinka/opencode-skills
-    source_branch: feature/vectorbt-v2
-    commit_hash: e4f5g6h
-    last_updated: 2026-04-06T15:00:00
 meta:
   last_updated: 2026-04-07T10:30:00
   commit_hash: a1b2c3d
   upgrade_permission: allowed
   upgrade_blocked_until: null
+  project_context: opencode-skills repo
 ```
 
 ## Duration Parsing
@@ -60,8 +56,9 @@ meta:
 ## Status Detection
 
 ```bash
-# Check if skill is stale
+# Check if skill is stale (tries branch, then tag)
 git ls-remote $source_repo refs/heads/$source_branch
+git ls-remote $source_repo refs/tags/$source_branch
 # Compare to local commit_hash
 ```
 

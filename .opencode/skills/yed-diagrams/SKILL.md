@@ -1,3 +1,8 @@
+---
+name: yed-diagrams
+description: Generate valid yEd-compatible GraphML diagrams from code analysis. Use when visualizing architecture, class hierarchies, data flows, or creating migration planning diagrams.
+---
+
 # yEd Diagrams
 
 Generate valid yEd-compatible GraphML diagrams from code analysis.

@@ -28,12 +28,11 @@ skill-name/SKILL.md    # required: name + description
 
 | Command | Description |
 |---------|-------------|
-| `skill create <name>` | Create new skill scaffold |
 | `skill update <name>` | Update skill to HEAD of tracked branch |
 | `skill update --all` | Update all managed skills |
 | `skill switch <name> <repo> <branch>` | Change skill's source repo/branch |
 | `skill sources` | List all tracked skill sources |
-| `skill status [<name>]` | Show sync status (ahead/behind/stale) |
+| `skill status [<name>]` | Show sync status (synced/behind/untracked) |
 
 ## Local Memory
 
@@ -48,8 +47,10 @@ managed_skills:
     last_updated: <dt>
 meta:
   last_updated: <dt>
+  commit_hash: <sha>
   upgrade_permission: allowed|blocked
   upgrade_blocked_until: <date|null>
+  project_context: <notes>
 ```
 
 ## Update Flow
@@ -58,10 +59,16 @@ meta:
 flowchart TD
   A[skill update X] --> B{in managed_skills?}
   B -->|no| C[Error: not tracked]
-  B -->|yes| D[Fetch source_repo]
-  D --> E[Checkout source_branch]
-  E --> F[Copy to skills dir]
-  F --> G[Update commit_hash]
+  B -->|yes| D{upgrade blocked?}
+  D -->|yes| E{expired?}
+  E -->|no| F[Skip]
+  E -->|yes| G[Ask permission]
+  D -->|no| H[Fetch source_repo]
+  G -->|denied| I[Set blocked_until]
+  G -->|ok| H
+  H --> J[Checkout source_branch]
+  J --> K[Copy to skills dir]
+  K --> L[Update commit_hash]
 ```
 
 ## Switch Flow
@@ -84,12 +91,6 @@ Stale = remote HEAD ≠ local `commit_hash`
 | synced | At tracked commit |
 | behind | Remote has new commits |
 | untracked | Not in managed_skills |
-
-## Repo Format
-
-Supported: `https://github.com/owner/repo` | `git@github.com:owner/repo` | local path
-
-Branch: any valid git ref (branch, tag, commit SHA)
 
 ## Refs
 

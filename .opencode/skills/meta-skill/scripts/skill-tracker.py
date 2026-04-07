@@ -2,7 +2,6 @@
 """Skill source tracker - manage skills from git repos with branch tracking."""
 
 import argparse
-import json
 import re
 import shutil
 import subprocess
@@ -40,8 +39,11 @@ def load_memory() -> dict:
 
 
 def save_memory(data: dict) -> None:
-    """Save data back to local-memory.md."""
-    yaml_block = yaml.dump(data, default_flow_style=False, sort_keys=False)
+    """Save data back to local-memory.md, preserving history and project_context."""
+    # Ensure top-level keys exist
+    data.setdefault("managed_skills", {})
+    data.setdefault("meta", {})
+
     history = ""
     if LOCAL_MEMORY.exists():
         content = LOCAL_MEMORY.read_text()
@@ -49,16 +51,37 @@ def save_memory(data: dict) -> None:
         history_match = re.search(r"\n## History\n.*", content, re.DOTALL)
         if history_match:
             history = history_match.group(0)
+        # Preserve project_context if not in new data
+        old_yaml = re.search(r"```yaml\n(.*?)\n```", content, re.DOTALL)
+        if old_yaml:
+            old_data = yaml.safe_load(old_yaml.group(1))
+            if isinstance(old_data, dict):
+                # Migrate flat fields into meta if needed
+                for key in (
+                    "last_updated",
+                    "commit_hash",
+                    "upgrade_permission",
+                    "upgrade_blocked_until",
+                    "project_context",
+                ):
+                    if key in old_data and key not in data.get("meta", {}):
+                        data.setdefault("meta", {})[key] = old_data[key]
 
+    yaml_block = yaml.dump(data, default_flow_style=False, sort_keys=False)
     LOCAL_MEMORY.write_text(f"```yaml\n{yaml_block}```\n{history}")
 
 
-def get_remote_head(repo: str, branch: str) -> Optional[str]:
-    """Get HEAD commit SHA from remote repo."""
+def get_remote_head(repo: str, ref: str) -> Optional[str]:
+    """Get commit SHA from remote repo. Handles branches, tags, and SHAs."""
     try:
-        output = run_git(["ls-remote", repo, f"refs/heads/{branch}"], check=False)
-        if output:
-            return output.split()[0]
+        # SHA ref (40 hex chars) - return directly
+        if re.match(r"^[0-9a-f]{40}$", ref):
+            return ref
+        # Try branch first, then tag
+        for prefix in ("refs/heads/", "refs/tags/"):
+            output = run_git(["ls-remote", repo, f"{prefix}{ref}"], check=False)
+            if output:
+                return output.split()[0]
     except Exception:
         pass
     return None

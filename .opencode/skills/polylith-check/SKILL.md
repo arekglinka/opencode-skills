@@ -1,5 +1,7 @@
+---
 name: polylith-check
 description: Validates Polylith architecture compliance for Python projects. Use when checking project structure, adding components/bases, configuring namespace, fixing import paths, or integrating Rust/maturin components.
+---
 
 ## Structure
 
