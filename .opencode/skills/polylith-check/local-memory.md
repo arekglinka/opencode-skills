@@ -1,5 +1,5 @@
-last_updated: 2026-03-16
-commit_hash: 44773afaf14c061c27e8cea19a6a3cc211cc2533
+last_updated: 2026-03-18
+commit_hash: 16a5a74
 upgrade_permission: allowed
 upgrade_blocked_until: null
 project_context: |
@@ -8,6 +8,8 @@ project_context: |
   - NO __init__.py in namespace dirs (PEP 420)
   - dev-mode-dirs: ["components", "bases", "."] (parent dirs)
   - Rust component: components/trading_bot/backtest_engine/rust/ (maturin)
-  - Workspace members: projects/* + rust component
-  - polylith-cli in [dependency-groups].dev
+  - uv sync auto-builds Rust extension (no build script needed)
+  - [tool.uv.sources] resolves backtest_engine_rust to local path
+  - [tool.uv] cache-keys in rust/pyproject.toml triggers rebuild on .rs changes
+  - [tool.maturin] features = ["python"] (NOT "pyo3/extension-module")
   - 🤔 warnings for maturin packages are expected (optional, try/except fallback)

@@ -1,5 +1,4 @@
-last_updated: null
-commit_hash: null
-upgrade_permission: allowed
-upgrade_blocked_until: null
-project_context: Global skill for task queue management
+last_updated: 2026-03-16T20:45:00Z
+project_path: /home/ag/wsp/trading-bot
+last_task_id: 003
+active_tasks: [003]

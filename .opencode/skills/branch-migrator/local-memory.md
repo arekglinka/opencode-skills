@@ -1,10 +1,12 @@
 ```yaml
-last_migration: 2026-03-15 10:30:00 Europe/Warsaw  # datetime - when last migration started/completed
-source_branch: feature/xyz                         # string - branch being migrated from
-target_branch: main                                # string - branch being migrated to
-last_commit_hash: e0d8be7e3de64eee727ac0913044439cf9948880  # sha - last commit processed
-migration_status: pending                          # enum: pending|in_progress|completed|failed
-conflicts_resolved: false                          # bool - whether conflicts were resolved
+last_migration: 2026-03-17 Europe/Warsaw
+source_branch: feat/vectorbt-integration
+target_branch: main2
+last_commit_hash: a5c869c
+migration_status: staged
+conflicts_resolved: false
+scope: .opencode/agents/quant-guardian.md (single file)
+source_commits: b82d0b4, 4334ecd
 ```
 
 ## Field Descriptions
