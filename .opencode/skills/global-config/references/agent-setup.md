@@ -55,7 +55,7 @@ tools:
 The plugin's `applyAgentConfig` replaces `config.agent` entirely. Custom agents from `.opencode/agents/` are preserved via `filteredConfigAgents` unless:
 
 1. Agent name conflicts with a builtin (`sisyphus`, `oracle`, `explore`, etc.)
-2. Agent name is in `disabled_agents` in `oh-my-opencode.json`
+2. Agent name is in `disabled_agents` in `oh-my-openagent.json`
 
 ### call_omo_agent Allowlist
 
@@ -70,14 +70,30 @@ Use `category`-based delegation instead: `task(category="deep", prompt="...")`.
 
 ## Model Overrides
 
-In `oh-my-opencode.json`:
+In `oh-my-openagent.json`:
 ```json
 {
   "agents": {
-    "agent-name": { "model": "provider/model-id", "variant": "high" }
+    "agent-name": {
+      "model": "provider/model-id",
+      "variant": "high",
+      "reasoningEffort": "high",
+      "thinking": { "type": "enabled" }
+    }
   }
 }
 ```
+
+### Field Constraints (CRITICAL — verify against installed plugin binary)
+
+| Field | Type | Valid Values | Notes |
+|-------|------|--------------|-------|
+| `model` | string | `provider/model-id` | Required |
+| `variant` | string (free-form) | Any string (`low`, `medium`, `high`, `xhigh`, `max`) | Provider-specific |
+| `reasoningEffort` | enum | **`none` \| `minimal` \| `low` \| `medium` \| `high` \| `xhigh`** | ⚠️ NO `max` in plugin 3.x — use `xhigh` (Z.ai API aliases `xhigh`→`max`) |
+| `thinking` | object | `{ type: "enabled" \| "disabled", budgetTokens?: number }` | GLM-5.2 forced deep thinking |
+
+> **Schema URL mismatch trap**: The `$schema` URL points to dev branch which may show `max` as valid. The INSTALLED binary schema is authoritative. Test with `opencode debug config` after every change — a single invalid enum value causes `parseConfigPartially` to drop the ENTIRE `agents`/`categories` section, triggering hardcoded fallback chains (see [troubleshooting](troubleshooting.md)).
 
 ## Naming
 

@@ -48,7 +48,7 @@ curl -s "https://openrouter.ai/api/v1/models" \
 | File | Purpose | Models Section |
 |------|---------|----------------|
 | `opencode.jsonc` | Provider definitions | `provider.<name>.models` |
-| `oh-my-opencode.json` | Agent→model mapping | `agents.<name>.model` |
+| `oh-my-openagent.json` | Agent→model mapping | `agents.<name>.model` |
 
 ## Sync Workflow
 
@@ -56,25 +56,41 @@ curl -s "https://openrouter.ai/api/v1/models" \
 1. Query /models API → get list
 2. Test new model names if rumored/released
 3. Update opencode.jsonc → add model entries
-4. Update oh-my-opencode.json → assign to agents
-5. Verify → run opencode auth list
+4. Update oh-my-openagent.json → assign to agents
+5. Verify → run opencode auth list + check /tmp/oh-my-opencode.log for "Config loaded from"
 ```
 
 ## Z.ai Config
 
 Use built-in `zai-coding-plan` provider (configured via `opencode auth login`). No manual provider definition needed.
 
-Available models: `glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, `glm-5`, `glm-5-turbo`
+Available models: `glm-4.5`, `glm-4.5-air`, `glm-4.6`, `glm-4.7`, `glm-5`, `glm-5-turbo`, `glm-5.1`, `glm-5.2`, `glm-5v-turbo`
 
-## Agent Model Assignment
+## GLM-5.2 Reasoning (Exclusive Feature)
 
-| Agent | Recommended Model | Reason |
-|-------|-------------------|--------|
-| sisyphus | glm-5-turbo | Agent-optimized, tool calling |
-| oracle | glm-5 | Deep reasoning |
-| explore | glm-5-turbo | Fast codebase grep |
-| librarian | glm-5-turbo | Fast doc search |
-| prometheus | glm-5 | Strategic planning |
+GLM-5.2 is the **only** GLM model that supports `reasoning_effort` parameter. Older models only have `thinking` on/off.
+
+| `reasoningEffort` value | API behavior | Use for |
+|---|---|---|
+| `xhigh` | maps to API `max` (deep reasoning, default) | Strategic agents: sisyphus, oracle, prometheus, metis, momus, hephaestus |
+| `high` | enhanced reasoning | Medium-tier: sisyphus-junior, atlas, vectorbt, visual-engineering, unspecified-high, writing |
+| `medium`/`low` | maps to `high` | Rarely useful |
+| `minimal`/`none` | skips thinking | Fast grep agents (use `thinking: { type: "disabled" }` instead) |
+
+⚠️ Plugin 3.x enum rejects `max` — use `xhigh`. Z.ai API aliases `xhigh`→`max` internally.
+
+GLM-5.2 has forced deep thinking enabled by default. Even without explicit config, responses include `reasoning_content` + `reasoning_tokens`.
+
+## Agent Model Assignment (current best practice)
+
+| Agent | Model | thinking | reasoningEffort |
+|-------|-------|----------|-----------------|
+| sisyphus, oracle, prometheus, metis, momus, hephaestus | glm-5.2 | enabled | xhigh |
+| sisyphus-junior, multimodal-looker, atlas | glm-5.2 | enabled | high |
+| librarian, explore | glm-5.2 | disabled | — |
+| Categories: ultrabrain, artistry, deep | glm-5.2 | enabled | xhigh |
+| Categories: visual-engineering, unspecified-high, writing | glm-5.2 | enabled | high |
+| Categories: quick, unspecified-low | glm-5.2 | disabled | — |
 
 ## GLM-5 vs GLM-5-Turbo
 

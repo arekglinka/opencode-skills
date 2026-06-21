@@ -4,7 +4,7 @@
 
 | Context | Path | Purpose |
 |---------|------|---------|
-| OpenCode | `~/.config/opencode/oh-my-opencode.json` | Core cfg |
+| OpenCode | `~/.config/opencode/oh-my-openagent.json` | omo plugin cfg (NOT `oh-my-opencode.json` despite schema URL — see troubleshooting.md) |
 | VSCode | `.vscode/settings.json` | Workspace stgs |
 | Git | `~/.gitconfig` | Git cfg |
 | Oh-My-Agent | `~/.config/oh-my-openagent/config.json` | Agent cfg |

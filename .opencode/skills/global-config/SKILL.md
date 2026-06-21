@@ -9,6 +9,16 @@ compatibility: opencode
 
 Generic cfg manager for OpenCode + oh-my-openagent.
 
+## Critical Gotchas (READ FIRST)
+
+| Trap | Right |
+|------|-------|
+| Config filename | `~/.config/opencode/oh-my-openagent.json` (NOT `oh-my-opencode.json` despite schema URL) |
+| `reasoningEffort` enum | Use `xhigh` not `max` (plugin 3.x rejects `max`; API aliases `xhigh`→`max`) |
+| Validation failure | Single invalid field drops the ENTIRE section → plugin uses hardcoded fallback chains |
+| Debug log | `/tmp/oh-my-opencode.log` — `grep "Config loaded\|Partial config" | tail -3` |
+| Schema URL vs binary | Dev-branch schema shows fields/enums the installed binary may reject — always test with `opencode debug config` |
+
 ## Structure
 
 ```
@@ -45,7 +55,7 @@ project_context: <notes>
 | list | `cfg ls` | List all cfg files |
 | get | `cfg get <key>` | Retrieve cfg value |
 | set | `cfg set <key> <val>` | Set cfg value |
-| validate | `cfg validate` | Verify cfg syntax |
+| validate | `cfg validate` | Verify cfg syntax + plugin loads it (grep `/tmp/oh-my-opencode.log` for "Config loaded") |
 | backup | `cfg backup` | Save cfg state |
 | restore | `cfg restore` | Load cfg state |
 | sync | `cfg sync-models` | Sync provider models from API |
@@ -63,7 +73,8 @@ project_context: <notes>
 
 ## Refs
 
+- [troubleshooting](references/troubleshooting.md) — **start here for config load failures**
+- [agent-setup](references/agent-setup.md)
 - [config-files](references/config-files.md)
 - [model-syncing](references/model-syncing.md)
-- [agent-setup](references/agent-setup.md)
 - [local-config](references/local-config.md)

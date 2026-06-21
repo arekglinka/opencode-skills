@@ -6,8 +6,8 @@ oh-my-opencode merges configs: **global** (user-level) → **local** (project-le
 
 | Layer | Path | Scope | Commit? |
 |-------|------|-------|---------|
-| Global | `~/.config/opencode/oh-my-opencode.json` | All projects | No |
-| Local | `<project-root>/oh-my-opencode.json` | Current project only | Yes |
+| Global | `~/.config/opencode/oh-my-openagent.json` | All projects | No |
+| Local | `<project-root>/oh-my-openagent.json` | Current project only | Yes |
 
 Merge: `deepMerge(global, local)` — local keys win on conflict.
 
@@ -74,6 +74,7 @@ Same merge for categories:
 
 | Check | Method |
 |-------|--------|
-| Valid JSON | `python3 -c "import json; json.load(open('oh-my-opencode.json'))"` |
+| Valid JSON | `python3 -c "import json; json.load(open('oh-my-openagent.json'))"` |
+| Plugin loads cfg | `grep "Config loaded from\|Partial config" /tmp/oh-my-opencode.log \| tail -3` (expect non-empty agents map, NOT `{}`) |
 | Local loads | Restart opencode, check agent model in session info |
-| No global leak | Verify `~/.config/opencode/oh-my-opencode.json` has no project-local agent names |
+| No global leak | Verify `~/.config/opencode/oh-my-openagent.json` has no project-local agent names |
